@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_DB: quickserve_users
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  service-utilisateurs:
+    build:
+      context: ./service-utilisateurs
+    container_name: service-utilisateurs
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: root
+      DB_NAME: quickserve_users
+      JWT_SECRET: un_super_secret
+
+  postgres-produits:
+    image: postgres:15
+    container_name: postgres-produits
+    environment:
+      POSTGRES_DB: quickserve_produits
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata-produits:/var/lib/postgresql/data
+
+  service-produits:
+    build:
+      context: ./service-produits
+    container_name: service-produits
+    depends_on:
+      - postgres-produits
+    ports:
+      - "3001:3000"
+    environment:
+      DB_HOST: postgres-produits
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: root
+      DB_NAME: quickserve_produits
+      JWT_SECRET: un_autre_secret
+
+  frontend:
+    build:
+      context: ./quickserve-frontend
+      args:
+        VITE_API_URL: http://localhost:3000/api/utilisateurs
+    container_name: quickserve-frontend
+    environment:
+      - VITE_API_URL=http://localhost:3000/api/utilisateurs
+    ports:
+      - "5173:80"
+    depends_on:
+      - service-utilisateurs
+
+volumes:
+  pgdata:
+  pgdata-produits:

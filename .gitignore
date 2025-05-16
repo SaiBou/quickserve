@@ -1,0 +1,21 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Env files
+.env
+.env.*
+
+# Vite / React
+dist/
+build/
+.vite
+.cache
+
+# Docker volumes
+**/pgdata*
+**/pgdata-produits*
+
+# Prisma
+prisma/dev.db
+prisma/dev.db-journal

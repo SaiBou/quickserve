@@ -1,0 +1,46 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: quickserve_users
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  service-utilisateurs:
+    build:
+      context: ./service-utilisateurs
+    env_file:
+      - ./service-utilisateurs/.env
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+
+  postgres-produits:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: quickserve_produits
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata-produits:/var/lib/postgresql/data
+
+  service-produits:
+    build:
+      context: ./service-produits
+    env_file:
+      - ./service-produits/.env
+    depends_on:
+      - postgres-produits
+    ports:
+      - "3001:3000"
+
+volumes:
+  pgdata:
+  pgdata-produits:

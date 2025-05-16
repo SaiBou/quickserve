@@ -1,39 +1,75 @@
-# 🚀 QuickServe
+# 🍽️ QuickServe
 
-QuickServe est une plateforme en microservices :
+QuickServe est une plateforme de gestion intelligente de services (utilisateurs et produits), construite en architecture microservices avec un front-end React.
 
-- Frontend : React + TypeScript + TailwindCSS
-- Backend : Node.js + Express + Prisma
-- Bases de données : PostgreSQL
-- Conteneurisation : Docker + Docker Compose
+---
+
+## 📦 Structure du projet
+
+```
+QuickServe/
+├── quickserve-frontend/       # Front-end (React + Vite + TailwindCSS)
+├── service-utilisateurs/      # Microservice utilisateurs (Node.js + Prisma)
+├── service-produits/          # Microservice produits (Node.js + Prisma)
+├── docker-compose.yml         # Orchestration des services
+└── README.md
+```
 
 ---
 
 ## ⚙️ Prérequis
 
-- Node.js ≥ 18
-- Docker & Docker Compose
+- [Docker](https://www.docker.com/)
+- [Git](https://git-scm.com/)
+- (facultatif) Node.js si tu veux lancer les services localement
 
 ---
 
 ## 🚀 Lancer le projet
 
+1. **Cloner le dépôt**
+
 ```bash
 git clone https://github.com/SaiBou/quickserve.git
 cd quickserve
+```
 
-cp quickserve-frontend/.env.example quickserve-frontend/.env
+2. **Créer les fichiers `.env` à partir des exemples**
+
+```bash
 cp service-utilisateurs/.env.example service-utilisateurs/.env
 cp service-produits/.env.example service-produits/.env
+cp quickserve-frontend/.env.example quickserve-frontend/.env
+```
 
+3. **Lancer tous les services avec Docker**
+
+```bash
 docker compose up --build -d
+```
 
+4. **Initialiser la base de données (à faire UNE fois)**
+
+```bash
 docker exec -it service-utilisateurs npx prisma migrate dev --name init
+```
 
-## Accès
+> 💡 Tu peux aussi le faire pour `service-produits` si ce service a une base liée à Prisma.
 
-Frontend : http://localhost:5173
+---
 
-Utilisateurs API : http://localhost:3000/api/utilisateurs
+## 🧪 Accès et test
 
-Produits API : http://localhost:3001/api/produits
+- Frontend : [http://localhost:5173](http://localhost:5173)
+- API utilisateurs : [http://localhost:3000/api/utilisateurs](http://localhost:3000/api/utilisateurs)
+- API produits : [http://localhost:3001/api/produits](http://localhost:3001/api/produits)
+
+---
+
+## 📂 Fichiers `.env`
+
+> **NE PAS MODIFIER directement les `.env.example`**  
+> Pour configurer votre environnement, dupliquez les `.env.example` en `.env` dans chaque dossier.
+
+---
+

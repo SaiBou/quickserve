@@ -5,9 +5,9 @@ services:
     image: postgres:15
     container_name: postgres
     environment:
-      POSTGRES_DB: quickserve_users
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: root
+      POSTGRES_DB: ${DB_USERS_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -24,18 +24,19 @@ services:
     environment:
       DB_HOST: postgres
       DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: root
-      DB_NAME: quickserve_users
-      JWT_SECRET: un_super_secret
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${DB_USERS_NAME}
+      JWT_SECRET: ${JWT_SECRET_USERS}
+      DATABASE_URL: ${DATABASE_URL_USERS}
 
   postgres-produits:
     image: postgres:15
     container_name: postgres-produits
     environment:
-      POSTGRES_DB: quickserve_produits
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: root
+      POSTGRES_DB: ${DB_PRODUCTS_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5433:5432"
     volumes:
@@ -52,19 +53,20 @@ services:
     environment:
       DB_HOST: postgres-produits
       DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: root
-      DB_NAME: quickserve_produits
-      JWT_SECRET: un_autre_secret
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${DB_PRODUCTS_NAME}
+      JWT_SECRET: ${JWT_SECRET_PRODUCTS}
+      DATABASE_URL: ${DATABASE_URL_PRODUCTS}
 
   frontend:
     build:
       context: ./quickserve-frontend
       args:
-        VITE_API_URL: http://localhost:3000/api/utilisateurs
+        VITE_API_URL: ${VITE_API_URL}
     container_name: quickserve-frontend
     environment:
-      - VITE_API_URL=http://localhost:3000/api/utilisateurs
+      - VITE_API_URL=${VITE_API_URL}
     ports:
       - "5173:80"
     depends_on:

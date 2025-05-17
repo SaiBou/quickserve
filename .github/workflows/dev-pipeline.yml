@@ -1,0 +1,35 @@
+name: QuickServe POC CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout du code
+        uses: actions/checkout@v3
+
+      - name: 🐳 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 🧱 Build des services avec Docker Compose
+        run: docker-compose build
+
+      - name: 🚀 Lancer les services
+        run: |
+          docker-compose up -d
+          echo "Pause 15s pour laisser les conteneurs démarrer"
+          sleep 15
+
+      - name: 🧪 Test API utilisateurs
+        run: |
+          curl --fail http://localhost:8080/api/utilisateurs || (echo "Service utilisateurs KO" && exit 1)
+
+      - name: 🧪 Test API produits
+        run: |
+          curl --fail http://localhost:8080/api/produits || (echo "Service produits KO" && exit 1)

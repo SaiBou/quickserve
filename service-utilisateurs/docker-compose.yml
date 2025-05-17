@@ -1,46 +1,56 @@
+version: "3.8"
+
 services:
-  postgres:
-    image: postgres:15
-    environment:
-      POSTGRES_DB: quickserve_users
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: root
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-
   service-utilisateurs:
-    build:
-      context: ./service-utilisateurs
-    env_file:
-      - ./service-utilisateurs/.env
-    depends_on:
-      - postgres
+    build: ./service-utilisateurs
     ports:
-      - "3000:3000"
-
-  postgres-produits:
-    image: postgres:15
+      - "3001:3000"
     environment:
-      POSTGRES_DB: quickserve_produits
+      DATABASE_URL: postgres://postgres:postgres@postgres-utilisateurs:5432/utilisateurs
+    depends_on:
+      - postgres-utilisateurs
+
+  postgres-utilisateurs:
+    image: postgres:15
+    restart: always
+    environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: root
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: utilisateurs
     ports:
       - "5433:5432"
     volumes:
-      - pgdata-produits:/var/lib/postgresql/data
+      - postgres_utilisateurs_data:/var/lib/postgresql/data
 
   service-produits:
-    build:
-      context: ./service-produits
-    env_file:
-      - ./service-produits/.env
+    build: ./service-produits
+    ports:
+      - "3002:3000"
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres-produits:5432/produits
     depends_on:
       - postgres-produits
+
+  postgres-produits:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: produits
     ports:
-      - "3001:3000"
+      - "5434:5432"
+    volumes:
+      - postgres_produits_data:/var/lib/postgresql/data
+
+  gateway:
+    build: ./gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - service-utilisateurs
+      - service-produits
 
 volumes:
-  pgdata:
-  pgdata-produits:
+  postgres_utilisateurs_data:
+  postgres_produits_data:

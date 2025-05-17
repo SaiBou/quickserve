@@ -13,7 +13,7 @@ export default function HomePage() {
         </h1>
 
         <p className="text-gray-600 text-base mb-10">
-          Transport, déménagement, nettoyage, dépannage & accompagnement — tous vos services, rapidement et en toute sécurité.
+          Transport, déménagement, nettoyage, dépannage et accompagnement — tous vos services, rapidement et en toute sécurité.
         </p>
 
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4">

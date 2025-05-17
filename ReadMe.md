@@ -37,6 +37,7 @@ cd quickserve
 2. **Créer les fichiers `.env` à partir des exemples**
 
 ```bash
+cp .env.example .env
 cp service-utilisateurs/.env.example service-utilisateurs/.env
 cp service-produits/.env.example service-produits/.env
 cp quickserve-frontend/.env.example quickserve-frontend/.env

@@ -26,6 +26,11 @@ jobs:
           echo "Pause 15s pour laisser les conteneurs démarrer"
           sleep 15
 
+      - name: 🪵 Logs du service gateway
+        run: |
+          docker compose logs gateway
+
+
       - name: 🧪 Test API utilisateurs depuis un conteneur
         run: |
           docker run --network=host curlimages/curl:7.85.0 curl --fail http://localhost:8080/api/utilisateurs || (echo "Service utilisateurs KO" && exit 1)

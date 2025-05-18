@@ -3,4 +3,5 @@ services:
     name: quickserve
     env: docker
     plan: free
-    dockerCommand: docker compose up
+    dockerComposeFilePath: docker-compose.yml
+    startCommand: docker compose up

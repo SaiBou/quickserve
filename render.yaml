@@ -1,5 +1,0 @@
-services:
-  - type: docker
-    name: quickserve
-    plan: free
-    dockerComposeFilePath: docker-compose.yml
